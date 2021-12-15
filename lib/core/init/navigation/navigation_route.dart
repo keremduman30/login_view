@@ -1,8 +1,10 @@
-// ignore_for_file: prefer_final_fields
+// ignore_for_file: prefer_final_fields, prefer_const_constructors
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_guide_examples/core/component/card/not_found_navigator_widget.dart';
+import 'package:flutter_guide_examples/core/constant/navigation/navigation_constant.dart';
+import 'package:flutter_guide_examples/view/register/view/register_view.dart';
 
 
 
@@ -14,7 +16,8 @@ class NavigationRoute {
 
   Route<dynamic> generateRoute(RouteSettings args) {
     switch (args.name) {
-      
+        case NavigationConstant.REGISTER_VIEW:
+        return normalNavigate(RegisterView());
     
 
       default:

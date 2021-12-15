@@ -7,10 +7,8 @@ import 'package:flutter_guide_examples/core/init/lang/getx/language_maps.dart';
 import 'package:flutter_guide_examples/core/init/navigation/navigation_route.dart';
 import 'package:flutter_guide_examples/core/init/navigation/navigation_service.dart';
 import 'package:flutter_guide_examples/core/init/theme/app_theme_light.dart';
-import 'package:flutter_guide_examples/view/gifview/view/gif_view.dart';
-import 'package:flutter_guide_examples/view/home/view/home_view.dart';
-import 'package:flutter_guide_examples/view/liquit_swipe/view/liquit_swipe_view.dart';
 import 'package:flutter_guide_examples/view/login/view/login_view.dart';
+import 'package:flutter_guide_examples/view/register/view/register_view.dart';
 import 'package:get/get.dart';
 
 void main() async {
@@ -41,14 +39,5 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       home: LoginView(),
     );
-  }
-}
-
-class Anasayfa extends StatelessWidget {
-  const Anasayfa({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(body: LiquitSwipeView());
   }
 }

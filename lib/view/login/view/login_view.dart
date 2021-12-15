@@ -29,7 +29,7 @@ class LoginView extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: context.dymaicHeight(0.10),
+                height: context.dymaicHeight(0.05),
               ),
               buildSvg(context),
               Padding(
@@ -78,7 +78,7 @@ class LoginView extends StatelessWidget {
           child: buildPasswordFormField(),
         ),
         SizedBox(
-          height: 20,
+          height: context.dymaicHeight(0.04),
         ),
         Padding(
           padding: context.paddingNormalHorizontal,
@@ -86,18 +86,18 @@ class LoginView extends StatelessWidget {
         ),
         Padding(
           padding: context.paddingMediumHorizontal,
-          child: buildLoginButton(context),
+          child: buildLoginButton(context, viewModel),
         ),
         SizedBox(
-          height: context.dymaicHeight(0.01),
+          height: context.dymaicHeight(0.03),
         ),
         buildCreateTextButton(context),
         buildOrText(context),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            buildGoogleButton(),
-            buildFaceButton(),
+            buildGoogleButton(context),
+            buildFaceButton(context),
           ],
         )
       ],
@@ -147,11 +147,13 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Widget buildLoginButton(BuildContext context) {
+  Widget buildLoginButton(BuildContext context, LoginViewModel viewModel) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
           primary: ColorShemeLight.instance.buttonColor, textStyle: context.textThem.headline6!.copyWith(color: Colors.white, fontSize: 18)),
-      onPressed: () {},
+      onPressed: () {
+        viewModel.selectedLoginButton();
+      },
       child: Center(
         child: Padding(
           padding: context.paddingLowVertical,
@@ -185,7 +187,7 @@ class LoginView extends StatelessWidget {
 
   Padding buildOrText(BuildContext context) {
     return Padding(
-      padding: context.paddingMedium,
+      padding: context.paddingNormal,
       child: Text(
         "or".tr,
         style:
@@ -194,11 +196,11 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  ButtonLoginWidget buildGoogleButton() {
+  ButtonLoginWidget buildGoogleButton(BuildContext context) {
     return ButtonLoginWidget(
       widget: Container(
         width: double.infinity,
-        height: 30,
+        height: context.dymaicHeight(0.04),
         decoration: BoxDecoration(
             image: DecorationImage(
           image: AssetImage(ImageConstant.instance.loginGooglePng),
@@ -209,11 +211,11 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  ButtonLoginWidget buildFaceButton() {
+  ButtonLoginWidget buildFaceButton(BuildContext context) {
     return ButtonLoginWidget(
       widget: Container(
         width: double.infinity,
-        height: 30,
+        height: context.dymaicHeight(0.04),
         decoration: BoxDecoration(
             image: DecorationImage(
           image: AssetImage(
