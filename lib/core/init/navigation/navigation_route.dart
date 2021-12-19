@@ -4,6 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_guide_examples/core/component/card/not_found_navigator_widget.dart';
 import 'package:flutter_guide_examples/core/constant/navigation/navigation_constant.dart';
+import 'package:flutter_guide_examples/view/home/view/home_view.dart';
+import 'package:flutter_guide_examples/view/login/view/login_view.dart';
+import 'package:flutter_guide_examples/view/login/view_model/login_view_model.dart';
 import 'package:flutter_guide_examples/view/register/view/register_view.dart';
 
 
@@ -18,6 +21,10 @@ class NavigationRoute {
     switch (args.name) {
         case NavigationConstant.REGISTER_VIEW:
         return normalNavigate(RegisterView());
+         case NavigationConstant.LOGIN_VIEW:
+        return normalNavigate(LoginView());
+           case NavigationConstant.HOME_VIEW:
+        return normalNavigate(HomeView());
     
 
       default:

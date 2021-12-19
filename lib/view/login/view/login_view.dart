@@ -26,7 +26,7 @@ class LoginView extends StatelessWidget {
       },
       onPageBuilder: (BuildContext context, LoginViewModel viewModel) => Scaffold(
         body: SingleChildScrollView(
-          child: Column(
+          child: Obx(() =>viewModel.loginLoading.value ? Center(child: CircularProgressIndicator()) :Column(
             children: [
               SizedBox(
                 height: context.dymaicHeight(0.05),
@@ -38,7 +38,7 @@ class LoginView extends StatelessWidget {
               ),
               buildLoginForm(context, viewModel)
             ],
-          ),
+          ),)
         ),
       ),
     );
@@ -64,55 +64,76 @@ class LoginView extends StatelessWidget {
 
   Form buildLoginForm(BuildContext context, LoginViewModel viewModel) {
     return Form(
+        key: viewModel.formkey,
         child: Column(
-      children: [
-        Padding(
-          padding: context.paddingNormalHorizontal,
-          child: buildEmailFormField(),
-        ),
-        SizedBox(
-          height: context.dymaicHeight(0.05),
-        ),
-        Padding(
-          padding: context.paddingNormalHorizontal,
-          child: buildPasswordFormField(),
-        ),
-        SizedBox(
-          height: context.dymaicHeight(0.04),
-        ),
-        Padding(
-          padding: context.paddingNormalHorizontal,
-          child: buildCheckBoxRow(viewModel, context),
-        ),
-        Padding(
-          padding: context.paddingMediumHorizontal,
-          child: buildLoginButton(context, viewModel),
-        ),
-        SizedBox(
-          height: context.dymaicHeight(0.03),
-        ),
-        buildCreateTextButton(context),
-        buildOrText(context),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            buildGoogleButton(context),
-            buildFaceButton(context),
+            Padding(
+              padding: context.paddingNormalHorizontal,
+              child: buildEmailFormField(viewModel),
+            ),
+            SizedBox(
+              height: context.dymaicHeight(0.05),
+            ),
+            Padding(
+              padding: context.paddingNormalHorizontal,
+              child: buildPasswordFormField(viewModel),
+            ),
+            SizedBox(
+              height: context.dymaicHeight(0.03),
+            ),
+            Padding(
+              padding: context.paddingNormalHorizontal,
+              child: buildCheckBoxRow(viewModel, context),
+            ),
+            SizedBox(
+              height: context.dymaicHeight(0.02),
+            ),
+            Padding(
+              padding: context.paddingMediumHorizontal,
+              child: buildLoginButton(context, viewModel),
+            ),
+            SizedBox(
+              height: context.dymaicHeight(0.03),
+            ),
+            buildCreateTextButton(context, viewModel),
+            buildOrText(context),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                buildGoogleButton(context),
+                buildFaceButton(context),
+              ],
+            )
           ],
-        )
-      ],
-    ));
+        ));
   }
 
-  Widget buildEmailFormField() {
+  Widget buildEmailFormField(LoginViewModel viewModel) {
     return TextFormFieldWidget(
+      textHidden: false,
       hintText: "email".tr,
+      controller: viewModel.email,
+      validator: viewModel.fetchEmailValidator,
     );
   }
 
-  Widget buildPasswordFormField() {
-    return TextFormFieldWidget(
-      hintText: "password".tr,
+  Widget buildPasswordFormField(LoginViewModel viewModel) {
+    return Obx(
+      () => TextFormFieldWidget(
+        textHidden: viewModel.passwordCheck.value ? true : false,
+        suffixIcon: IconButton(
+          icon: Icon(
+            viewModel.passwordCheck.value ? Icons.lock_open : Icons.lock,
+            color: Colors.blue,
+          ),
+          onPressed: () {
+            viewModel.chancePasswordCheck();
+          },
+        ),
+        controller: viewModel.password,
+        hintText: "password".tr,
+        validator: viewModel.fetchValidator,
+      ),
     );
   }
 
@@ -130,20 +151,26 @@ class LoginView extends StatelessWidget {
                 },
               ),
             ),
-            Text(
-              "remember".tr,
-              style: context.textThem.headline6!.copyWith(color: context.colors.onSecondary),
-            ),
+            buildRememberText(context),
           ],
         ),
-        Text(
-          "forget_password".tr,
-          style: context.textThem.headline6!.copyWith(
-            color: ColorShemeLight.instance.buttonColor,
-            fontWeight: FontWeight.bold,
-          ),
-        )
+        buildForgetPassword(context)
       ],
+    );
+  }
+
+  Text buildForgetPassword(BuildContext context) {
+    return Text(
+      "forget_password".tr,
+      style: context.textThem.headline6!
+          .copyWith(color: ColorShemeLight.instance.buttonColor, fontWeight: FontWeight.bold, fontSize: context.normalValue),
+    );
+  }
+
+  Text buildRememberText(BuildContext context) {
+    return Text(
+      "remember".tr,
+      style: context.textThem.headline6!.copyWith(color: context.colors.onSecondary, fontSize: context.normalValue),
     );
   }
 
@@ -166,22 +193,40 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Row buildCreateTextButton(BuildContext context) {
+  Row buildCreateTextButton(BuildContext context, LoginViewModel viewModel) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("dont_have_account".tr),
+        buildDonthaveAccountText(context),
         SizedBox(
           width: context.dymaicWidth(0.02),
         ),
-        Text(
-          "create_app".tr,
-          style: context.textThem.headline6!.copyWith(
-            color: ColorShemeLight.instance.buttonColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        buildCreateAppTextButton(viewModel, context),
       ],
+    );
+  }
+
+  Text buildDonthaveAccountText(BuildContext context) => buildDontHaveText(context);
+
+  Text buildDontHaveText(BuildContext context) =>
+      Text("dont_have_account".tr, style: context.textThem.headline6!.copyWith(fontSize: context.normalValue));
+  GestureDetector buildCreateAppTextButton(LoginViewModel viewModel, BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        viewModel.selectedCreateTextButton();
+      },
+      child: Padding(
+        padding: context.paddingLow,
+        child: buildCreateAppText(context),
+      ),
+    );
+  }
+
+  Text buildCreateAppText(BuildContext context) {
+    return Text(
+      "create_app".tr,
+      style: context.textThem.headline6!
+          .copyWith(color: ColorShemeLight.instance.buttonColor, fontWeight: FontWeight.bold, fontSize: context.normalValue),
     );
   }
 

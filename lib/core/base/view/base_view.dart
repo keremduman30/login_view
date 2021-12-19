@@ -17,15 +17,12 @@ class BaseView<T extends GetxController> extends StatefulWidget {
 class _BaseViewState<T extends GetxController> extends State<BaseView<T>> {
   late T viewModel;
 
-
-
   @override
   void initState() {
     super.initState();
     viewModel = widget.viewModel;
     widget.onModelReady(viewModel);
-    viewModel=Get.put(viewModel);
-  
+    viewModel = Get.put(viewModel);
   }
 
   @override
@@ -33,6 +30,7 @@ class _BaseViewState<T extends GetxController> extends State<BaseView<T>> {
     super.dispose();
     if (widget.onDispose != null) widget.onDispose!(viewModel); //void old için ve retun gerek medigi için boyle
   }
+  
 
   @override
   Widget build(BuildContext context) {

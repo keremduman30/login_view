@@ -8,8 +8,19 @@ class RegisterFormWidget extends StatelessWidget {
   final IconData icon;
   final String label;
   final TextEditingController controller;
+  final String? Function(String? validator) validator;
+  final bool textHidden;
+  final Widget? suffixIcon;
 
-  const RegisterFormWidget({Key? key, required this.icon, required this.label, required this.controller}) : super(key: key);
+  const RegisterFormWidget({
+    Key? key,
+    required this.icon,
+    required this.label,
+    required this.controller,
+    required this.validator,
+    required this.textHidden,
+    this.suffixIcon,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,12 +44,18 @@ class RegisterFormWidget extends StatelessWidget {
             ],
           ),
           TextFormField(
+            controller: controller,
+            obscureText: textHidden,
+            textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
               hintText: label,
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(left: 12),
               enabled: true,
+              suffixIcon: suffixIcon,
+             
             ),
+            validator: validator,
           ),
         ],
       ),

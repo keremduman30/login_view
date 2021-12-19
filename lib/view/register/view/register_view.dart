@@ -8,6 +8,7 @@ import 'package:flutter_guide_examples/core/extension/context_extension.dart';
 import 'package:flutter_guide_examples/core/init/theme/light/color_sheme_light.dart';
 import 'package:flutter_guide_examples/view/_product/register_form_widget.dart';
 import 'package:flutter_guide_examples/view/register/view_model/register_view_model.dart';
+import 'package:get/get.dart';
 
 class RegisterView extends StatelessWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -22,25 +23,44 @@ class RegisterView extends StatelessWidget {
         viewmodel.setContext(context);
       },
       onPageBuilder: (BuildContext context, RegisterViewModel viewModel) => Scaffold(
-          body: SingleChildScrollView(
-            child: Padding(
-                  padding: context.paddingMedium,
-                  child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(height: context.dymaicWidth(0.2)),
-              buildTextTitle(context),
-              SizedBox(height: context.dymaicHeight(0.03)),
-              buildDescriptionText(),
-              SizedBox(height: context.dymaicHeight(0.05)),
-              Container(
-                child: buildForm(controller, context),
-              ),
-            ],
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              viewModel.fetchBack();
+            },
+            icon: Icon(
+              Icons.keyboard_arrow_left,
+              size: context.mediumValue,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        body: Obx(
+          () => SingleChildScrollView(
+            child: viewModel.registerLoading.value
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Padding(
+                    padding: context.paddingMedium,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(height: context.dymaicWidth(0.001)),
+                        buildTextTitle(context),
+                        SizedBox(height: context.dymaicHeight(0.03)),
+                        buildDescriptionText(),
+                        SizedBox(height: context.dymaicHeight(0.05)),
+                        Container(
+                          child: buildForm(controller, context, viewModel),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 
@@ -64,16 +84,42 @@ class RegisterView extends StatelessWidget {
     );
   }
 
-  Form buildForm(TextEditingController controller, BuildContext context) {
+  Form buildForm(TextEditingController controller, BuildContext context, RegisterViewModel viewModel) {
     return Form(
+      key: viewModel.formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RegisterFormWidget(icon: Icons.email, label: "email", controller: controller),
+          RegisterFormWidget(
+            textHidden: false,
+            icon: Icons.email,
+            label: "email",
+            controller: viewModel.email,
+            validator: viewModel.fetchEmailValidator,
+          ),
           SizedBox(height: context.dymaicHeight(0.03)),
-          RegisterFormWidget(icon: Icons.person, label: "user name", controller: controller),
+          RegisterFormWidget(
+            textHidden: false,
+            icon: Icons.person,
+            label: "user name",
+            controller: viewModel.userName,
+            validator: viewModel.fetchValidator,
+          ),
           SizedBox(height: context.dymaicHeight(0.03)),
-          RegisterFormWidget(icon: Icons.lock, label: "password", controller: controller),
+          Obx(
+            () => RegisterFormWidget(
+                textHidden: viewModel.checkPassword.value ? false : true,
+                icon: Icons.lock,
+                label: "password",
+                controller: viewModel.password,
+                validator: viewModel.fetchValidator,
+                suffixIcon: IconButton(
+                  icon: Icon(viewModel.checkPassword.value ? Icons.lock_open : Icons.lock),
+                  onPressed: () {
+                    viewModel.changeTextHidden();
+                  },
+                )),
+          ),
           SizedBox(
             height: context.dymaicHeight(0.08),
           ),
@@ -81,14 +127,14 @@ class RegisterView extends StatelessWidget {
             onTap: () {
               print("tıklanıldı");
             },
-            child: buildRegisterButton(context),
+            child: buildRegisterButton(context, viewModel),
           ),
         ],
       ),
     );
   }
 
-  Container buildRegisterButton(BuildContext context) {
+  Container buildRegisterButton(BuildContext context, RegisterViewModel viewModel) {
     return Container(
       width: double.infinity,
       height: context.dymaicWidth(0.12),
@@ -98,7 +144,9 @@ class RegisterView extends StatelessWidget {
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(primary: ColorShemeLight.instance.buttonColor),
-        onPressed: () {},
+        onPressed: () {
+          viewModel.fetchRegisterButton();
+        },
         child: Text(
           "Register",
           style: context.textThem.headline6!.copyWith(color: Colors.white, fontSize: 19),
