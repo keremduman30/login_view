@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_guide_examples/core/init/cache/local_manager.dart';
 import 'package:flutter_guide_examples/core/init/navigation/navigation_service.dart';
@@ -8,4 +9,5 @@ abstract class BaseViewModel {
   void init();
   LocaleManager localeManager = LocaleManager.instance;
   NavigationService navigationService = NavigationService.instance;
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 }

@@ -15,7 +15,7 @@ class LoginViewModel extends GetxController with BaseViewModel {
   late TextEditingController email;
   late TextEditingController password;
   late GlobalKey<FormState> formkey;
-  var passwordCheck=false.obs;
+  var passwordCheck = false.obs;
   late LoginService _service;
   var loginLoading = false.obs;
 
@@ -26,14 +26,15 @@ class LoginViewModel extends GetxController with BaseViewModel {
     email = TextEditingController();
     password = TextEditingController();
     formkey = GlobalKey();
-    _service=LoginService();
+    _service = LoginService();
   }
 
   @override
   void setContext(BuildContext context) {
     this.context = context;
   }
-   void changeRegisterLoaging() {
+
+  void changeRegisterLoading() {
     loginLoading.value = !loginLoading.value;
   }
 
@@ -73,17 +74,18 @@ class LoginViewModel extends GetxController with BaseViewModel {
   void selectedLoginButton() async {
     var isThereProblem = formkey.currentState!.validate();
     if (isThereProblem) {
-      var isProblemService=await _service.signInLogin(email.text, password.text);
+      var isProblemService = await _service.signInLogin(email.text, password.text);
       if (isProblemService!) {
-         changeRegisterLoaging();
-         await localeManager.setBoolValue(LocalKeysPreferencesKeys.login, true);
+        changeRegisterLoading();
+        await localeManager.setBoolValue(LocalKeysPreferencesKeys.login, true);
         Get.snackbar("uyarı", "giriş basarılı");
         navigationService.navigatorToPageClear(path: NavigationConstant.HOME_VIEW);
-        changeRegisterLoaging();
+        changeRegisterLoading();
       }
     }
   }
-  void chancePasswordCheck(){
-    passwordCheck.value=!passwordCheck.value;
+
+  void chancePasswordCheck() {
+    passwordCheck.value = !passwordCheck.value;
   }
 }

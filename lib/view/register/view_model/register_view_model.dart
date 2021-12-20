@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_guide_examples/core/constant/enum/local_keys.dart';
 import 'package:flutter_guide_examples/core/constant/navigation/navigation_constant.dart';
+import 'package:flutter_guide_examples/view/register/model/user_model.dart';
 import 'package:flutter_guide_examples/view/register/service/register_service.dart';
 import 'package:get/get.dart';
 import '../../../core/base/view_model/base_view_model.dart';
@@ -57,20 +58,20 @@ class RegisterViewModel extends GetxController with BaseViewModel {
   Future<void> fetchRegisterButton() async {
     var isproblems = formKey.currentState?.validate();
     if (isproblems!) {
-      var isProblemsService = await _service.userCreate(userName.text, email.text, password.text);
-      if (isProblemsService!) {
+      var userModel = await _service.userCreate(userName.text, email.text, password.text);
+      if (userModel!=null) {
         changeRegisterLoaging();
         await localeManager.setBoolValue(LocalKeysPreferencesKeys.login, true);
+        _service.registerUserFirestore(userModel.userID!,userModel.toJsonFirestore(userName.text));
         Get.snackbar("uyarı", "kayıt basarılı");
-        navigationService.navigatorToPageClear(path: NavigationConstant.HOME_VIEW);
         changeRegisterLoaging();
-      } else {
-        print("elseye giridi");
+        navigationService.navigatorToPageClear(path: NavigationConstant.HOME_VIEW);
       }
     }
   }
 
   void fetchBack() {
+    
     Get.back();
   }
 

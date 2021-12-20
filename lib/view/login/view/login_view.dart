@@ -26,23 +26,30 @@ class LoginView extends StatelessWidget {
       },
       onPageBuilder: (BuildContext context, LoginViewModel viewModel) => Scaffold(
         body: SingleChildScrollView(
-          child: Obx(() =>viewModel.loginLoading.value ? Center(child: CircularProgressIndicator()) :Column(
-            children: [
-              SizedBox(
-                height: context.dymaicHeight(0.05),
-              ),
-              buildSvg(context),
-              Padding(
-                padding: EdgeInsets.only(bottom: context.dymaicHeight(0.008)),
-                child: buildLoginText(context),
-              ),
-              buildLoginForm(context, viewModel)
-            ],
-          ),)
-        ),
+            child: Obx(
+          () => viewModel.loginLoading.value ? buildCircular() : buildColumBody(context, viewModel),
+        )),
       ),
     );
   }
+
+  Column buildColumBody(BuildContext context, LoginViewModel viewModel) {
+    return Column(
+      children: [
+        SizedBox(
+          height: context.dymaicHeight(0.05),
+        ),
+        buildSvg(context),
+        Padding(
+          padding: EdgeInsets.only(bottom: context.dymaicHeight(0.008)),
+          child: buildLoginText(context),
+        ),
+        buildLoginForm(context, viewModel)
+      ],
+    );
+  }
+
+  Center buildCircular() => Center(child: CircularProgressIndicator());
 
   Widget buildSvg(BuildContext context) {
     return Padding(

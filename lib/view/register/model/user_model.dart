@@ -29,12 +29,12 @@ class UserModel {
       profilFoto: docSnap.data()!["profilFoto"]!,
     );
   }
-  Map<String,dynamic> toJson(User user){
-    Map<String,dynamic> users=Map();
-    users["userId"]=user.uid;
-    users["userName"]=user.displayName;
-    users["mail"]=user.email;
-    users["profilFoto"]=user.photoURL;
+  Map<String,dynamic> toJsonFirestore(String? name){
+    Map<String,dynamic> users={};
+    users["userId"]=userID;
+    users["userName"]=name;
+    users["mail"]=mail;
+    users["profilFoto"]=profilFoto;
     return users;
 
   }

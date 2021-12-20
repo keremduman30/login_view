@@ -7,7 +7,7 @@ class LoginService {
 
   Future<bool?> signInLogin(String email, String password) async {
     try {
-      UserCredential user = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       return true;
     } on FirebaseAuthException catch (e) {
       viewException(e.code);

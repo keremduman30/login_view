@@ -6,10 +6,7 @@ import 'package:flutter_guide_examples/core/component/card/not_found_navigator_w
 import 'package:flutter_guide_examples/core/constant/navigation/navigation_constant.dart';
 import 'package:flutter_guide_examples/view/home/view/home_view.dart';
 import 'package:flutter_guide_examples/view/login/view/login_view.dart';
-import 'package:flutter_guide_examples/view/login/view_model/login_view_model.dart';
 import 'package:flutter_guide_examples/view/register/view/register_view.dart';
-
-
 
 class NavigationRoute {
   static NavigationRoute _instace = NavigationRoute._init();
@@ -19,13 +16,12 @@ class NavigationRoute {
 
   Route<dynamic> generateRoute(RouteSettings args) {
     switch (args.name) {
-        case NavigationConstant.REGISTER_VIEW:
+      case NavigationConstant.REGISTER_VIEW:
         return normalNavigate(RegisterView());
-         case NavigationConstant.LOGIN_VIEW:
+      case NavigationConstant.LOGIN_VIEW:
         return normalNavigate(LoginView());
-           case NavigationConstant.HOME_VIEW:
+      case NavigationConstant.HOME_VIEW:
         return normalNavigate(HomeView());
-    
 
       default:
         return MaterialPageRoute(builder: (context) => NotFoundNAvigatorWidget());
