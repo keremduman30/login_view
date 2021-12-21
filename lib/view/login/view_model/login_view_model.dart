@@ -74,9 +74,9 @@ class LoginViewModel extends GetxController with BaseViewModel {
   void selectedLoginButton() async {
     var isThereProblem = formkey.currentState!.validate();
     if (isThereProblem) {
+      changeRegisterLoading();
       var isProblemService = await _service.signInLogin(email.text, password.text);
       if (isProblemService!) {
-        changeRegisterLoading();
         await localeManager.setBoolValue(LocalKeysPreferencesKeys.login, true);
         Get.snackbar("uyarı", "giriş basarılı");
         navigationService.navigatorToPageClear(path: NavigationConstant.HOME_VIEW);

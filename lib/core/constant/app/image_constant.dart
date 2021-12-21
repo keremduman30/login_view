@@ -11,6 +11,7 @@ class ImageConstant {
   final loginGooglePng = "google".toPng;
   final loginFaceookPng1 = "facebook".toPng;
   final loginFaceookPng = "face".toPng;
+  final userPng = "user".toPng;
 }
 
 extension _ImageConstantExtension on String {

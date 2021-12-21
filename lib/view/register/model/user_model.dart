@@ -23,10 +23,10 @@ class UserModel {
   factory UserModel.fromFirestoreDocumentSnaphot(DocumentSnapshot<Map<String, dynamic>> docSnap) {
     // final doc=docSnap!.data();
     return UserModel(
-      userID: docSnap.data()!['userID']!,
-      userName: docSnap.data()!["userName"]!,
-      mail: docSnap.data()!["mail"]!,
-      profilFoto: docSnap.data()!["profilFoto"]!,
+      userID: docSnap.data()?['userID'],
+      userName: docSnap.data()?["userName"],
+      mail: docSnap.data()?["mail"],
+      profilFoto: docSnap.data()?["profilFoto"],
     );
   }
   Map<String,dynamic> toJsonFirestore(String? name){
