@@ -73,7 +73,10 @@ ListView bodyListviewBuilder(HomeViewModel viewModel, BuildContext context) {
         case Feed.DASHBOARDCARD:
           return buildDashboardImage(context, viewModel);
         case Feed.TABBAR:
-          return buildTabbar(context, viewModel);
+          return SizedBox(
+            height: context.dymaicHeight(0.04),
+            child: buildTabbar(context, viewModel),
+          );
         case Feed.FEED_CARD:
           return buildFeedCard(viewModel);
 
@@ -84,45 +87,47 @@ ListView bodyListviewBuilder(HomeViewModel viewModel, BuildContext context) {
   );
 }
 
-Column buildDashboardImage(BuildContext context, HomeViewModel viewModel) {
-  return Column(
-    children: [
-      SizedBox(
-        width: double.infinity,
-        height: context.dymaicHeight(context.lowValue / 25),
-        child: PageView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: viewModel.itemsDahborad.length,
-          itemBuilder: (context, index) {
-            return Padding(
-                padding: context.paddingNormal,
-                child: ContainerWidget(
-                  height: context.dymaicHeight(context.lowValue / 25),
-                  width: double.infinity,
+Widget buildDashboardImage(BuildContext context, HomeViewModel viewModel) {
+  return SizedBox(
+    height: context.dymaicWidth(0.6),
+    child: PageView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: viewModel.itemsDahborad.length,
+      itemBuilder: (context, index) {
+        return Padding(
+            padding: context.paddingNormal,
+            child: ContainerWidget(
+              width: double.infinity,
+              boxDecoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  image: AssetImage(viewModel.itemsDahborad[index].imageUrl),
-                  shadowColor: Colors.grey.withOpacity(0.2),
-                  spreadRadiusShadow: 3,
-                  blurRadiusShadow: 4,
-                ));
-          },
-          onPageChanged: (value) {
-            viewModel.changeIndexPage(value);
-          },
-        ),
-      ),
-    ],
+                  color: Colors.blue,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 4,
+                      spreadRadius: 3,
+                      color: Colors.grey.withOpacity(0.2),
+                    )
+                  ],
+                  image: DecorationImage(image: AssetImage(viewModel.itemsDahborad[index].imageUrl), fit: BoxFit.cover)),
+            ));
+      },
+      onPageChanged: (value) {
+        viewModel.changeIndexPage(value);
+      },
+    ),
   );
 }
 
-Padding buildTabbar(BuildContext context, HomeViewModel viewModel) {
+Widget buildTabbar(BuildContext context, HomeViewModel viewModel) {
   return Padding(
-      padding: context.paddingNormal,
-      child: ContainerWidget(
-        height: context.dymaicWidth(0.090),
+    padding: context.paddingLowHorizontal,
+    child: ContainerWidget(
+      boxDecoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        containerChild: buildTabbarList(viewModel),
-      ));
+      ),
+      containerchild: buildTabbarList(viewModel),
+    ),
+  );
 }
 
 ListView buildTabbarList(HomeViewModel viewModel) {
@@ -136,7 +141,10 @@ ListView buildTabbarList(HomeViewModel viewModel) {
             child: Container(
               height: context.dymaicWidth(0.090),
               padding: context.paddingMediumHorizontal,
-              decoration: BoxDecoration(color: viewModel.colors[index], borderRadius: BorderRadius.circular(20)),
+              decoration: BoxDecoration(
+                color: viewModel.colors[index],
+                borderRadius: BorderRadius.circular(20),
+              ),
               child: Center(
                 child: Text(
                   viewModel.tabbars[index],
@@ -155,17 +163,18 @@ ListView buildFeedCard(HomeViewModel viewModel) {
     itemCount: 3,
     itemBuilder: (context, index) {
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: context.normalPlus, vertical: context.lowValue),
+        padding: EdgeInsets.only(left: context.normalPlus, right: context.normalPlus, top: context.normalValue, bottom: context.lowValue),
         child: Container(
-            height: context.dymaicHeight(context.lowValue / 35),
+            height: context.dymaicWidth(0.5),
             decoration:
                 BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.grey.shade400)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildFeedRowImage(context, viewModel, index),
+                Expanded(flex: 3, child: buildFeedRowImage(context, viewModel, index)),
                 Expanded(
-                  child: buildFeedColumnDesription(),
+                  flex: 3,
+                  child: buildFeedColumnDesription(context),
                 )
               ],
             )),
@@ -174,51 +183,63 @@ ListView buildFeedCard(HomeViewModel viewModel) {
   );
 }
 
-Column buildFeedColumnDesription() {
+Column buildFeedColumnDesription(BuildContext context) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
-      AutoSizeText(
-        "hakkari dogal guzelliklerini  korumak ve saygı duymak ",
-        style: GoogleFonts.poppins(letterSpacing: 1, fontSize: 12),
+      const Spacer(
+        flex: 1,
       ),
-      AutoSizeText(
-        "hakkari dogal guzelliklerini korumak ve saygı duymak",
-        overflow: TextOverflow.ellipsis,
-        style: GoogleFonts.poppins(color: Colors.grey[600]),
-        maxLines: 1,
+      Expanded(
+        flex: 6,
+        child: AutoSizeText(
+          "dogal guzelliklerini  korumak ve saygı duymak ",
+          style: GoogleFonts.poppins(letterSpacing: 1, fontSize: 12),
+        ),
       ),
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          IconButtonWidget(
-            icon: ImageConstant.instance.security,
-          ),
-          const Spacer(),
-          IconButtonWidget(
-            icon: ImageConstant.instance.message,
-          ),
-          const Spacer(),
-          IconButtonWidget(
-            icon: ImageConstant.instance.share,
-          ),
-          const Spacer(),
-        ],
+      const Spacer(
+        flex: 1,
+      ),
+      Expanded(
+        flex: 3,
+        child: AutoSizeText(
+          "dogal guzelliklerini korumak ve saygı duymak",
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.poppins(color: Colors.grey[600]),
+          maxLines: 1,
+        ),
+      ),
+      Expanded(
+        flex: 5,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButtonWidget(
+              icon: ImageConstant.instance.security,
+            ),
+            const Spacer(),
+            IconButtonWidget(
+              icon: ImageConstant.instance.message,
+            ),
+            const Spacer(),
+            IconButtonWidget(
+              icon: ImageConstant.instance.share,
+            ),
+            const Spacer()
+          ],
+        ),
       )
     ],
   );
 }
 
-Padding buildFeedRowImage(BuildContext context, HomeViewModel viewModel, int index) {
+Widget buildFeedRowImage(BuildContext context, HomeViewModel viewModel, int index) {
   return Padding(
     padding: EdgeInsets.only(right: context.lowValue),
     child: Container(
-      height: context.dymaicHeight(context.lowValue / 35),
-      width: context.dymaicWidth(context.lowValue / 22),
       decoration: BoxDecoration(
-          // color: Colors.blue,
           borderRadius: BorderRadius.circular(15),
           image: DecorationImage(image: AssetImage(viewModel.itemsDahborad[index].imageUrl), fit: BoxFit.cover)),
     ),

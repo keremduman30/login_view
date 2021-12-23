@@ -17,7 +17,12 @@ class HomeViewModel extends GetxController with BaseViewModel {
     Color.fromRGBO(142, 68, 173, 1),
     Color.fromRGBO(52, 73, 94, 1),
     Color.fromRGBO(211, 84, 0, 1),
-    Color.fromRGBO(241, 196, 14, 1)
+    Color.fromRGBO(241, 196, 14, 1),
+    Color.fromRGBO(254, 95, 85, 1),
+    Color.fromRGBO(142, 68, 173, 1),
+    Color.fromRGBO(52, 73, 94, 1),
+    Color.fromRGBO(211, 84, 0, 1),
+    Color.fromRGBO(241, 196, 14, 1),
   ];
   var users = [].obs;
   var indexPageBuilder = 0.obs;
@@ -29,7 +34,7 @@ class HomeViewModel extends GetxController with BaseViewModel {
     itemsDahborad.add(HomeModel("hakkari de hayat var", ImageConstant.instance.h1toJpg));
     itemsDahborad.add(HomeModel("hakkari de hayat var", ImageConstant.instance.h2toJpg));
     itemsDahborad.add(HomeModel("hakkari de hayat var", ImageConstant.instance.h3toJpg));
-    tabbars = ["photology", "trending", "politics", "movies", "culture"];
+    tabbars = ["photology", "trending", "politics", "movies", "culture", "photology", "trending", "politics", "movies", "culture"];
   }
 
   var homeviewLoading = false.obs;
